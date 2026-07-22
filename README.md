@@ -44,11 +44,11 @@ python sleepEDF_cassette_process.py --windowsize 30 --multiprocess 8
 
 
 python shhs_process.py --windowsize 30 --multiprocess 8
-```
+
 
 Here, `--windowsize 30` specifies a 30-second epoch, and `--multiprocess 8` enables eight preprocessing workers. Please configure the raw-data paths in the preprocessing scripts before running them.
 
----
+
 
 ## 🚀 Usage & Training Commands
 
@@ -65,17 +65,16 @@ python self_supservised.py \
 
 ### 2. SHHS
 
-```bash
 python self_supservised.py \
     --dataset SHHS \
     --model AIM \
     --n_dim 256 \
     --train_ratio 0.1
-```
+
 
 The argument `--train_ratio 0.1` means that only **10% of labeled downstream training samples** are used for linear classification. Set `--train_ratio 1.0` to use the full training set.
 
----
+
 
 ## 📖 Requirements
 
