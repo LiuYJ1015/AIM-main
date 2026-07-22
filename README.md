@@ -7,25 +7,25 @@ This repository contains the official implementation of **AIM-STAGE**, a self-su
 
 The implementation supports the following public sleep datasets:
 
-### 1. SLEEP-2013
+## 1. SLEEP-2013
 
 - **Description:** SLEEP-2013 contains approximately 39 overnight polysomnography (PSG) recordings from 20 healthy subjects.
 - **Role:** Used for self-supervised pre-training and few-shot downstream sleep-stage classification.
 - **Download:** [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/)
 
-### 2. SLEEP-2018
+## 2. SLEEP-2018
 
 - **Description:** SLEEP-2018 contains 153 overnight PSG recordings from 78 subjects.
 - **Role:** Used for self-supervised pre-training and few-shot downstream sleep-stage classification.
 - **Download:** [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/)
 
-###3. SHHS (Sleep Heart Health Study)**
+##3. SHHS (Sleep Heart Health Study)
 - **Role:** Used for large-scale self-supervised pre-training and few-shot downstream evaluation.
 - **Download:** [NSRR SHHS](https://sleepdata.org/datasets/shhs)
 
 > Access to SHHS requires registration and compliance with the NSRR data-use agreement.
 
----
+
 
 ### ⚙️ Data Preprocessing
 
@@ -35,12 +35,12 @@ The preprocessing scripts split raw sleep recordings into **non-overlapping 30-s
 - `train/`: labeled data for downstream linear evaluation;
 - `test/`: test data for final evaluation.
 
-### Sleep-EDF Cassette
+## Sleep-EDF Cassette
 
 
 python sleepEDF_cassette_process.py --windowsize 30 --multiprocess 8
 
-### SHHS
+## SHHS
 
 
 python shhs_process.py --windowsize 30 --multiprocess 8
@@ -54,7 +54,7 @@ Here, `--windowsize 30` specifies a 30-second epoch, and `--multiprocess 8` enab
 
 AIM-STAGE follows a two-stage paradigm: self-supervised representation learning on `pretext/` data, followed by linear evaluation using a limited fraction of labeled `train/` data.
 
-### 1. Sleep-EDF Cassette
+## 1. Sleep-EDF Cassette
 
 python self_supservised.py \
     --dataset SLEEP \
@@ -63,7 +63,7 @@ python self_supservised.py \
     --train_ratio 0.1
 
 
-### 2. SHHS
+## 2. SHHS
 
 python self_supservised.py \
     --dataset SHHS \
