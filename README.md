@@ -3,7 +3,7 @@
 
 This repository contains the official implementation of **AIM-STAGE**, a self-supervised framework for **few-shot EEG sleep stage classification**. The framework learns robust sleep EEG representations from unlabeled data and evaluates them with limited labeled samples.
 
-### 📊 Datasets
+# 📊 Datasets
 
 The implementation supports the following public sleep datasets:
 
@@ -29,7 +29,7 @@ The implementation supports the following public sleep datasets:
 
 
 
-### ⚙️ Data Preprocessing
+# ⚙️ Data Preprocessing
 
 The preprocessing scripts split raw sleep recordings into **non-overlapping 30-second epochs**, consistent with standard sleep-stage annotations. The processed data are divided into:
 
@@ -52,7 +52,7 @@ Here, `--windowsize 30` specifies a 30-second epoch, and `--multiprocess 8` enab
 
 
 
-## 🚀 Usage & Training Commands
+# 🚀 Usage & Training Commands
 
 AIM-STAGE follows a two-stage paradigm: self-supervised representation learning on `pretext/` data, followed by linear evaluation using a limited fraction of labeled `train/` data.
 
@@ -78,7 +78,7 @@ The argument `--train_ratio 0.1` means that only **10% of labeled downstream tra
 
 
 
-## 📖 Requirements
+# 📖 Requirements
 
 - Python 3.8+
 - PyTorch
