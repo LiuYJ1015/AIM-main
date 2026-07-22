@@ -1,9 +1,9 @@
 ```markdown
-# AIM-STAGE
+### AIM-STAGE
 
 This repository contains the official implementation of **AIM-STAGE**, a self-supervised framework for **few-shot EEG sleep stage classification**. The framework learns robust sleep EEG representations from unlabeled data and evaluates them with limited labeled samples.
 
-## 📊 Datasets
+### 📊 Datasets
 
 The implementation supports the following public sleep datasets:
 
@@ -19,7 +19,7 @@ The implementation supports the following public sleep datasets:
 
 ---
 
-## ⚙️ Data Preprocessing
+### ⚙️ Data Preprocessing
 
 The preprocessing scripts split raw sleep recordings into **non-overlapping 30-second epochs**, consistent with standard sleep-stage annotations. The processed data are divided into:
 
