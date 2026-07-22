@@ -7,11 +7,23 @@ This repository contains the official implementation of **AIM-STAGE**, a self-su
 
 The implementation supports the following public sleep datasets:
 
-**1. Sleep-EDF Cassette**
-- **Role:** Used for self-supervised pre-training and downstream sleep-stage classification.
+### 1. SLEEP-2013
+
+- **Description:** SLEEP-2013 contains approximately 39 overnight polysomnography (PSG) recordings from 20 healthy subjects.
+- **EEG channels:** `Fpz-Cz` and `Pz-Oz`
+- **Sampling rate:** 100 Hz
+- **Role:** Used for self-supervised pre-training and few-shot downstream sleep-stage classification.
 - **Download:** [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/)
 
-**2. SHHS (Sleep Heart Health Study)**
+### 2. SLEEP-2018
+
+- **Description:** SLEEP-2018 contains 153 overnight PSG recordings from 78 subjects.
+- **EEG channels:** `Fpz-Cz` and `Pz-Oz`
+- **Sampling rate:** 100 Hz
+- **Role:** Used for self-supervised pre-training and few-shot downstream sleep-stage classification.
+- **Download:** [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/)
+
+**3. SHHS (Sleep Heart Health Study)**
 - **Role:** Used for large-scale self-supervised pre-training and few-shot downstream evaluation.
 - **Download:** [NSRR SHHS](https://sleepdata.org/datasets/shhs)
 
