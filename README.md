@@ -39,11 +39,10 @@ The preprocessing scripts split raw sleep recordings into **non-overlapping 30-s
 
 
 python sleepEDF_cassette_process.py --windowsize 30 --multiprocess 8
-```
 
 ### SHHS
 
-```bash
+
 python shhs_process.py --windowsize 30 --multiprocess 8
 ```
 
@@ -57,13 +56,12 @@ AIM-STAGE follows a two-stage paradigm: self-supervised representation learning 
 
 ### 1. Sleep-EDF Cassette
 
-```bash
 python self_supservised.py \
     --dataset SLEEP \
     --model AIM \
     --n_dim 128 \
     --train_ratio 0.1
-```
+
 
 ### 2. SHHS
 
