@@ -1,4 +1,4 @@
-```markdown
+
 ### AIM-STAGE
 
 This repository contains the official implementation of **AIM-STAGE**, a self-supervised framework for **few-shot EEG sleep stage classification**. The framework learns robust sleep EEG representations from unlabeled data and evaluates them with limited labeled samples.
@@ -29,7 +29,7 @@ The preprocessing scripts split raw sleep recordings into **non-overlapping 30-s
 
 ### Sleep-EDF Cassette
 
-```bash
+
 python sleepEDF_cassette_process.py --windowsize 30 --multiprocess 8
 ```
 
