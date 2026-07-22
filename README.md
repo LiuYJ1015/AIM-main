@@ -19,8 +19,10 @@ The implementation supports the following public sleep datasets:
 - **Role:** Used for self-supervised pre-training and few-shot downstream sleep-stage classification.
 - **Download:** [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/)
 
-##3. SHHS (Sleep Heart Health Study)
-- **Role:** Used for large-scale self-supervised pre-training and few-shot downstream evaluation.
+## 3. SHHS (Sleep Heart Health Study)
+
+- **Description:** SHHS-1 is a large multicenter sleep cohort containing more than 5,800 subjects.
+- **Role:** Used for large-scale self-supervised pre-training and few-shot downstream sleep-stage classification.
 - **Download:** [NSRR SHHS](https://sleepdata.org/datasets/shhs)
 
 > Access to SHHS requires registration and compliance with the NSRR data-use agreement.
