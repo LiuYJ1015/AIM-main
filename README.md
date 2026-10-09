@@ -1,93 +1,81 @@
+# AIM-STAGE
 
-### AIM-STAGE
+Official implementation of **AIM-STAGE**, a self-supervised framework for **few-shot EEG sleep-stage classification**. AIM-STAGE learns transferable sleep EEG representations from unlabeled recordings and classifies sleep stages using only a small number of labeled epochs.
 
-This repository contains the official implementation of **AIM-STAGE**, a self-supervised framework for **few-shot EEG sleep stage classification**. The framework learns robust sleep EEG representations from unlabeled data and evaluates them with limited labeled samples.
+The framework combines three components:
 
-# 📊 Datasets
+- **Spectro-temporal explorer.** Each 30 s epoch is mapped by a short-time Fourier transform (STFT, `n_fft=256`, hop length `64`) into the time-frequency domain. The log-power spectrogram and the cross-channel phase difference, encoded as sine and cosine with low-amplitude bins masked, are concatenated into a multi-channel input.
+- **Local-global hybrid encoder.** A convolutional branch (channels `4 -> 6 -> 8 -> 16 -> 48`) extracts local spectro-temporal patterns, and a bottleneck Transformer (`d_model=48`, 6 layers, 3 heads) models long-range temporal dependencies.
+- **Adaptive interval-aware multi-kernel calibration loss.** For each anchor, multiple Gaussian kernels are placed between the mean and the maximum of the similarity distribution, and their responses are aggregated into a dynamic negative representation that is used in a margin-based contrastive objective.
 
-The implementation supports the following public sleep datasets:
+## Files
 
-## 1. SLEEP-2013
+| File | Description |
+| --- | --- |
+| `model.py` | Spectro-temporal explorer and local-global hybrid encoder. |
+| `loss.py` | Contrastive losses, including the proposed calibration loss and the MoCo, BYOL, SimSiam and SimCLR baselines. |
+| `utils.py` | Dataset loaders and the four physiology-aware augmentation operators. |
+| `self_supservised.py` | Self-supervised pre-training and downstream linear evaluation. |
 
-- **Description:** SLEEP-2013 contains approximately 39 overnight polysomnography (PSG) recordings from 20 healthy subjects.
-- **Role:** Used for self-supervised pre-training and few-shot downstream sleep-stage classification.
-- **Download:** [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/)
+## Datasets
 
-## 2. SLEEP-2018
+| Dataset | Subjects | Recordings | EEG channels | Sampling rate | Pretrain / train / test |
+| --- | --- | --- | --- | --- | --- |
+| SLEEP-2013 | 20 | 39 | Fpz-Cz, Pz-Oz | 100 Hz | 90 / 5 / 5 % |
+| SLEEP-2018 | 58 | 114 | Fpz-Cz, Pz-Oz | 100 Hz | 90 / 5 / 5 % |
+| SHHS-D | 1229 | 1229 | two EEG | 125 Hz | 98 / 1 / 1 % |
+| SHHS-H | 2823 | 2823 | two EEG | 125 Hz | 98 / 1 / 1 % |
 
-- **Description:** SLEEP-2018 contains 153 overnight PSG recordings from 78 subjects.
-- **Role:** Used for self-supervised pre-training and few-shot downstream sleep-stage classification.
-- **Download:** [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/)
+- SLEEP-2013 and SLEEP-2018 are from [PhysioNet Sleep-EDF Expanded](https://physionet.org/content/sleep-edfx/1.0.0/).
+- SHHS-D (apnea-hypopnea index above 15, obstructive sleep apnea) and SHHS-H (apnea-hypopnea index below 5, healthy) are from [NSRR SHHS](https://sleepdata.org/datasets/shhs). Access requires registration and compliance with the NSRR data-use agreement.
 
-## 3. SHHS (Sleep Heart Health Study)
+## Preprocessing
 
-- **Description:** SHHS-1 is a large multicenter sleep cohort containing more than 5,800 subjects.
-- **Role:** Used for large-scale self-supervised pre-training and few-shot downstream sleep-stage classification.
-- **Download:** [NSRR SHHS](https://sleepdata.org/datasets/shhs)
+Each recording is processed as follows:
 
-> Access to SHHS requires registration and compliance with the NSRR data-use agreement.
+1. band-pass filtering between 0.5 and 45 Hz with a zero-phase finite-impulse-response filter;
+2. 60 Hz notch filtering for SHHS;
+3. signals kept at their native sampling rate, 100 Hz for SLEEP-2013/SLEEP-2018 and 125 Hz for SHHS;
+4. segmentation into non-overlapping 30 s epochs, with epochs that lack a valid label discarded;
+5. per-epoch, per-channel z-score normalization before the STFT.
 
+The epochs are stored as pickles and split at the subject level into pre-training, training and test subsets.
 
+## Usage
 
-# ⚙️ Data Preprocessing
+AIM-STAGE follows a two-stage paradigm: self-supervised pre-training on unlabeled recordings, followed by frozen-encoder linear evaluation with a limited fraction of labeled data.
 
-The preprocessing scripts split raw sleep recordings into **non-overlapping 30-second epochs**, consistent with standard sleep-stage annotations. The processed data are divided into:
+```bash
+# SLEEP-2013 / SLEEP-2018
+python self_supservised.py --dataset SLEEP --n_dim 128 --train_ratio 0.05
 
-- `pretext/`: self-supervised pre-training data;
-- `train/`: labeled data for downstream linear evaluation;
-- `test/`: test data for final evaluation.
+# SHHS-D / SHHS-H
+python self_supservised.py --dataset SHHS --n_dim 256 --train_ratio 0.05
+```
 
-## Sleep-EDF Cassette
+`--train_ratio` sets the fraction of labeled downstream epochs (for example, `0.05` for 5%). The paper reports results at 1%, 2%, 5%, 10% and 15% labeled data.
 
+## Results
 
-python sleepEDF_cassette_process.py --windowsize 30 --multiprocess 8
+Mean accuracy (%) over 100 repeated runs:
 
-## SHHS
+| Dataset | 1% | 2% | 5% | 10% | 15% |
+| --- | --- | --- | --- | --- | --- |
+| SLEEP-2013 | 88.67 | 89.20 | 90.37 | 91.55 | 92.04 |
+| SLEEP-2018 | 80.56 | 80.39 | 80.05 | 80.10 | 79.96 |
+| SHHS-D | 69.32 | 70.21 | 70.71 | 70.74 | 70.69 |
+| SHHS-H | 75.35 | 76.33 | 76.98 | 77.22 | 77.44 |
 
-
-python shhs_process.py --windowsize 30 --multiprocess 8
-
-
-Here, `--windowsize 30` specifies a 30-second epoch, and `--multiprocess 8` enables eight preprocessing workers. Please configure the raw-data paths in the preprocessing scripts before running them.
-
-
-
-# 🚀 Usage & Training Commands
-
-AIM-STAGE follows a two-stage paradigm: self-supervised representation learning on `pretext/` data, followed by linear evaluation using a limited fraction of labeled `train/` data.
-
-## 1. Sleep-EDF Cassette
-
-python self_supservised.py \
-    --dataset SLEEP \
-    --model AIM \
-    --n_dim 128 \
-    --train_ratio 0.1
-
-
-## 2. SHHS
-
-python self_supservised.py \
-    --dataset SHHS \
-    --model AIM \
-    --n_dim 256 \
-    --train_ratio 0.1
-
-
-The argument `--train_ratio 0.1` means that only **10% of labeled downstream training samples** are used for linear classification. Set `--train_ratio 1.0` to use the full training set.
-
-
-
-# 📖 Requirements
+## Requirements
 
 - Python 3.8+
 - PyTorch
 - NumPy
 - SciPy
 - scikit-learn
-- MNE
+- PyWavelets
+- tqdm
 
 ```bash
-pip install torch numpy scipy scikit-learn mne
-```
+pip install torch numpy scipy scikit-learn PyWavelets tqdm
 ```
