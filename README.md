@@ -57,16 +57,7 @@ python self_supservised.py --dataset SHHS --n_dim 256 --train_ratio 0.05
 
 `--train_ratio` sets the fraction of labeled downstream epochs (for example, `0.05` for 5%). The paper reports results at 1%, 2%, 5%, 10% and 15% labeled data.
 
-## Results
 
-Mean accuracy (%) over 100 repeated runs:
-
-| Dataset | 1% | 2% | 5% | 10% | 15% |
-| --- | --- | --- | --- | --- | --- |
-| SLEEP-2013 | 88.67 | 89.20 | 90.37 | 91.55 | 92.04 |
-| SLEEP-2018 | 80.56 | 80.39 | 80.05 | 80.10 | 79.96 |
-| SHHS-D | 69.32 | 70.21 | 70.71 | 70.74 | 70.69 |
-| SHHS-H | 75.35 | 76.33 | 76.98 | 77.22 | 77.44 |
 
 ## Requirements
 
