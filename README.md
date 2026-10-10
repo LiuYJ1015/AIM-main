@@ -13,9 +13,11 @@ The framework combines three components:
 | File | Description |
 | --- | --- |
 | `model.py` | Spectro-temporal explorer and local-global hybrid encoder. |
-| `loss.py` | Contrastive losses, including the proposed calibration loss and the MoCo, BYOL, SimSiam and SimCLR baselines. |
+| `loss.py` | Adaptive interval-aware multi-kernel calibration loss. |
 | `utils.py` | Dataset loaders and the four physiology-aware augmentation operators. |
 | `self_supservised.py` | Self-supervised pre-training and downstream linear evaluation. |
+| `process/sleepEDF_cassette_process.py` | Preprocessing of SLEEP-2013 / SLEEP-2018. |
+| `process/shhs_process.py` | Preprocessing of SHHS-D / SHHS-H. |
 
 ## Datasets
 
@@ -55,6 +57,16 @@ python self_supservised.py --dataset SHHS --n_dim 256 --train_ratio 0.05
 
 `--train_ratio` sets the fraction of labeled downstream epochs (for example, `0.05` for 5%). The paper reports results at 1%, 2%, 5%, 10% and 15% labeled data.
 
+## Results
+
+Mean accuracy (%) over 100 repeated runs:
+
+| Dataset | 1% | 2% | 5% | 10% | 15% |
+| --- | --- | --- | --- | --- | --- |
+| SLEEP-2013 | 88.67 | 89.20 | 90.37 | 91.55 | 92.04 |
+| SLEEP-2018 | 80.56 | 80.39 | 80.05 | 80.10 | 79.96 |
+| SHHS-D | 69.32 | 70.21 | 70.71 | 70.74 | 70.69 |
+| SHHS-H | 75.35 | 76.33 | 76.98 | 77.22 | 77.44 |
 
 ## Requirements
 
